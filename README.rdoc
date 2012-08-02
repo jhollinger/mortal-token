@@ -26,6 +26,13 @@ pull requests are welcomed.
 
 Also, it is very early and the API may go through significant changes.
 
+== Install
+
+  [sudo] gem install mortal-token
+
+Or add it to your Gemfile
+  gem "mortal-token"
+
 == Use
 
 Though my example is a Sinatra app, it need not be. In fact, it needn't have anything to do with the Web. It's useful
