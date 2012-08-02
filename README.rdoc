@@ -1,0 +1,88 @@
+== MortalToken, because some tokens shouldn't live forever
+
+MortalToken is a library for creating tokens that self-destruct after a specified time. No need to store and look up the 
+token; it is self-verifying and self-expiring.
+
+I found myself wanting simple, secure (never a good mix), and not necessarily encrypted auth tokens for some Sinatra apps. 
+I wanted them to expire, but didn't want to keep track of them. Not finding anything, this library emerged. The default lifespan 
+is two of your Earth days. This does *not* mean "48 hours from when it was created". It means that the key will be valid throughout 
+"today" and "tomorrow". If the lifespan were one day, a key created at 23:59 would expire at 00:00.
+
+Steps:
+
+1. Generate a new token
+2. Give the client the resulting hash and salt
+3. *crickets*
+4. Receive a hash and salt from client
+5. Reconstitute the token from the salt, and test if the hashes match
+
+Read the full documentation at {jordanhollinger.com/docs/mortal-token/}[http://jordanhollinger.com/docs/mortal-token/].
+
+== Disclaimer
+
+This is not intended to be the most secure thing ever, but for all I know it's less secure than I think. Suggestions and 
+pull requests are welcomed.
+
+Also, it is very early and the API may go through significant changes.
+
+== Use
+
+Though my example is a Sinatra app, it need not be. In fact, it needn't have anything to do with the Web. It's useful
+anytime you want a self-contained, self-expiring token (w/ salt).
+
+  require 'mortal-token'
+
+  # You MUST set a secret key! Otherwise, anyone who looks at the source code will be able to forge tokens.
+  MortalToken.secret = 'asdf092$78roasdjfjfaklmsdadASDFopijf98%2ejA#Df@sdf'
+
+  post '/login' do
+    if login_ok?
+      # Create a brand new token. Store the resulting hash and salt.
+      token = MortalToken.new
+      session[:token] = token.hash
+      session[:salt] = token.salt
+
+      redirect '/secret'
+    end
+  end
+
+  get '/secret' do
+    # Attempt to reconstitute the original token, using the salt
+    token = MortalToken.new(session[:salt])
+
+    # Test if the token still is (or ever was) valid
+    if token == session[:token]
+      'Welcome!'
+    else
+      'Go away!'
+    end
+  end
+
+== Checking tokens
+
+These are all valid means of checking a token's validity. In this case, they will all return true. == and === are treated the same.
+
+  token_a = MortalToken.new
+  token_b = MortalToken.new(token_a.salt)
+
+  token_a == token_b
+  token_a == token_b.to_s
+  token_a == token_b.hash
+  token_a.to_s == token_b.to_s
+  token_a.hash == token_b.hash
+  token_a.to_s == token_b.hash
+
+== Tweak token parameters
+
+You may tweak certain parameters of the library in order to make it more secure, less, faster, etc.
+These are the defaults (see the MortalToken class for documentation about each parameter):
+
+  MortalCoil.rounds = 5
+  MortalCoil.valid_across = 2
+  MortalCoil.max_salt_length = 50
+  MortalCoil.min_salt_length = 10
+
+== License
+Copyright 2012 Jordan Hollinger
+
+Licensed under the Apache License
