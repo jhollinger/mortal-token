@@ -16,12 +16,12 @@ class MortalToken
     # The minimum salt length, defaults to 10
     attr_accessor :min_salt_length
 
-    # Returns a random string of 10-50 alphanumeric charachters
-    def rand
-      max_length = Kernel.rand(self.max_salt_length + 1)
+    # Returns a random string of between min_salt_length and max_salt_length alphanumeric charachters
+    def salt
+      max_length = rand(self.max_salt_length + 1)
       max_length = self.min_salt_length if max_length < self.min_salt_length
       pool_size = RAND_SEEDS.size
-      (0..max_length).map { RAND_SEEDS[Kernel.rand(pool_size)] }.join('')
+      (0..max_length).map { RAND_SEEDS[rand(pool_size)] }.join('')
     end
   end
 
@@ -33,7 +33,7 @@ class MortalToken
   # If you want to validate a hash from an existing token, pass
   # the existing token's salt. You should usually leave "start_date" alone.
   def initialize(salt=nil, start_date=nil)
-    @salt = salt || MortalToken.rand
+    @salt = salt || MortalToken.salt
     @start_date = start_date || Date.today
   end
 
