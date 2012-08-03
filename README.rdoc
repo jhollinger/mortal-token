@@ -8,6 +8,7 @@ the key will be valid throughout "today" and "tomorrow". If the lifespan were on
 in one minute at 00:00.
 
 My original use case was login auth tokens for some simple Sinatra apps. I can also see it being useful for API auth.
+Of course there are potential uses outside of HTTP, too.
 
 Steps:
 
@@ -26,11 +27,9 @@ Read the full documentation at {jordanhollinger.com/docs/mortal-token/}[http://j
 Or add it to your Gemfile
   gem "mortal-token"
 
-== Example
+== Example with Sinatra
 
-Though my example is a Sinatra app, it need not be. In fact, it needn't have anything to do with the Web. It's useful
-anytime you want a self-contained, self-expiring token (w/ salt).
-
+  require 'sinatra'
   require 'mortal-token'
 
   # You MUST set a secret key! Otherwise, anyone who looks at the source code will be able to forge tokens.
@@ -48,9 +47,9 @@ anytime you want a self-contained, self-expiring token (w/ salt).
   get '/secret' do
     token = MortalToken.new(session[:salt])
     if token == session[:token]
-      'Welcome, nice token!'
+      'Nice token!'
     else
-      'Go away, your token is expired or forged!'
+      'Your token is expired or forged!'
     end
   end
 
