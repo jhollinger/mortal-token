@@ -20,6 +20,11 @@ Steps:
 
 Read the full documentation at {jordanhollinger.com/docs/mortal-token/}[http://jordanhollinger.com/docs/mortal-token/].
 
+== Warning
+
+This is at best alph-quality software. It "works" but is not guaranteed to be secure. Don't use it in production, or at 
+least not in any important production. May contain traces of peanut oil.
+
 == Install
 
   [sudo] gem install mortal-token
