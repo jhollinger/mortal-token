@@ -1,4 +1,5 @@
 require 'date'
+require 'time'
 require 'digest/sha2'
 require 'mortal-token/version'
 require 'mortal-token/mortal-token'

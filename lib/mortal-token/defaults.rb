@@ -1,6 +1,7 @@
 class MortalToken
   # Set defaults
   self.rounds = 5
+  self.units = :days
   self.valid_across = 2
   self.max_salt_length = 50
   self.min_salt_length = 10

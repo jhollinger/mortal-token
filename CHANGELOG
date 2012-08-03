@@ -1,0 +1,7 @@
+** RELEASE 0.1.0 (?) **
+
+* Add config setting to change time units. Now works with :days, :hours, :minutes
+
+** RELEASE 0.0.1 (08/02/2012) **
+
+* Initial release

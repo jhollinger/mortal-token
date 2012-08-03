@@ -81,7 +81,8 @@ You may tweak certain parameters of the library in order to make it more secure,
 These are the defaults (see the MortalToken class for documentation about each parameter):
 
   MortalToken.rounds = 5
-  MortalToken.valid_across = 2
+  MortalToken.units = :days # or :hours, :minutes
+  MortalToken.valid_across = 2 # token is valid across n units
   MortalToken.max_salt_length = 50
   MortalToken.min_salt_length = 10
 
