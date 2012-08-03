@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Generate self-destructing tokens (experimental)"
   spec.description = "An EXPERIMENTAL library for generating self-contained, self-destructing tokens"
   spec.authors = ['Jordan Hollinger']
-  spec.date = '2012-08-02'
+  spec.date = '2012-08-03'
   spec.email = 'jordan@jordanhollinger.com'
   spec.homepage = 'http://github.com/jhollinger/mortal-token'
 

@@ -75,6 +75,19 @@ These are the defaults (see the MortalToken class for documentation about each p
   MortalToken.max_salt_length = 50
   MortalToken.min_salt_length = 10
 
+== Multiple configurations
+
+Your application may want to use MortalTokens in various contexts, where the same parameters may not make sense (probably units and valid_across).
+You may define different scopes and give them each their own config. Always define the default scope first (as above). Other scopes will inherit
+its secret.
+
+  MortalToken.config(:foo) do |config|
+    config.units = :minutes
+    config.valid_across = 10
+  end
+
+  token = MortalToken.use(:foo).token
+
 == License
 Copyright 2012 Jordan Hollinger
 
