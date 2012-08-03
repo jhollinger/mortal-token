@@ -22,8 +22,8 @@ Read the full documentation at {jordanhollinger.com/docs/mortal-token/}[http://j
 
 == Warning
 
-This is at best alph-quality software. It "works" but is not guaranteed to be secure. Don't use it in production, or at 
-least not in any important production. May contain traces of peanut oil.
+This is, at best, alpha-quality software. It "works" in that it doesn't usually blow up, but it is not guaranteed to be "right".
+Don't use it in production, or at least not in any important production. May contain traces of peanut oil.
 
 == Install
 
