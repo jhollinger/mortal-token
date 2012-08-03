@@ -38,26 +38,34 @@ describe MortalToken do
   end
 
   context 'hours' do
-    before(:each) { MortalToken.units = :hours }
+    MortalToken.config(:testing_hours) do |config|
+      config.units = :hours
+    end
 
     it "should be valid and equal right after being created" do
-      token = MortalToken.new
-      copy = MortalToken.new(token.salt)
-      copy.should === token
-      copy.should === token.to_s
+      MortalToken.use(:testing_hours) do |mt|
+        token = mt.token
+        copy = mt.token(token.salt)
+        copy.should === token
+        copy.should === token.to_s
+      end
     end
 
     it "should be valid if created one hour ago" do
-      token = MortalToken.new(nil, Time.now.utc - 3600)
-      copy = MortalToken.new(token.salt)
-      copy.should === token
-      copy.should === token.to_s
+      MortalToken.use(:testing_hours) do |mt|
+        token = mt.token(nil, Time.now.utc - 3600)
+        copy = mt.token(token.salt)
+        copy.should === token
+        copy.should === token.to_s
+      end
     end
 
     it "should not be valid if created two hours ago" do
-      token = MortalToken.new(nil, Time.now.utc - 7200)
-      copy = MortalToken.new(token.salt)
-      copy.should_not === token
+      MortalToken.use(:testing_hours) do |mt|
+        token = mt.token(nil, Time.now.utc - 7200)
+        copy = mt.token(token.salt)
+        copy.should_not === token
+      end
     end
   end
 

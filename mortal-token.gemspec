@@ -4,8 +4,8 @@ require File.join(File.dirname(__FILE__), 'lib', 'mortal-token', 'version')
 Gem::Specification.new do |spec|
   spec.name = 'mortal-token'
   spec.version = MortalToken::VERSION
-  spec.summary = "Generate self-destructing tokens"
-  spec.description = "A simple library for generating self-contained, self-destructing tokens"
+  spec.summary = "Generate self-destructing tokens (experimental)"
+  spec.description = "An EXPERIMENTAL library for generating self-contained, self-destructing tokens"
   spec.authors = ['Jordan Hollinger']
   spec.date = '2012-08-02'
   spec.email = 'jordan@jordanhollinger.com'
