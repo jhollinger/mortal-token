@@ -19,13 +19,6 @@ Steps:
 
 Read the full documentation at {jordanhollinger.com/docs/mortal-token/}[http://jordanhollinger.com/docs/mortal-token/].
 
-== Disclaimer
-
-This is not intended to be the most secure thing ever, but for all I know it's less secure than I think. Suggestions and 
-pull requests are welcomed.
-
-Also, it is very early and the API may go through significant changes.
-
 == Install
 
   [sudo] gem install mortal-token
@@ -33,7 +26,7 @@ Also, it is very early and the API may go through significant changes.
 Or add it to your Gemfile
   gem "mortal-token"
 
-== Use
+== Example
 
 Though my example is a Sinatra app, it need not be. In fact, it needn't have anything to do with the Web. It's useful
 anytime you want a self-contained, self-expiring token (w/ salt).
@@ -61,28 +54,18 @@ anytime you want a self-contained, self-expiring token (w/ salt).
     end
   end
 
-== Checking tokens
+== Checking token validity
 
-These are all valid means of checking a token's validity. In this case, they will all return true. == and === are treated the same.
-
-  token_a = MortalToken.new
-  token_b = MortalToken.new(token_a.salt)
-
-  token_a == token_b
-  token_a == token_b.to_s
-  token_a == token_b.hash
-  token_a.to_s == token_b.to_s
-  token_a.hash == token_b.hash
-  token_a.to_s == token_b.hash
+A token's == and === methods accept another token or a hash value. A return value of false means that the token/hash on the right is no longer (or never was) valid.
 
 == Tweak token parameters
 
 You may tweak certain parameters of the library in order to make it more secure, less, faster, etc.
 These are the defaults (see the MortalToken class for documentation about each parameter):
 
-  MortalToken.rounds = 5
-  MortalToken.units = :days # or :hours, :minutes
-  MortalToken.valid_across = 2 # token is valid across n units
+  MortalToken.rounds = 5            # rounds of hashing
+  MortalToken.units = :days         # or :hours, :minutes
+  MortalToken.valid_across = 2      # tokens are valid across N units
   MortalToken.max_salt_length = 50
   MortalToken.min_salt_length = 10
 
