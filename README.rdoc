@@ -56,7 +56,9 @@ anytime you want a self-contained, self-expiring token (w/ salt).
 
 == Checking token validity
 
-A token's == and === methods accept another token or a hash value. A return value of false means that the token/hash on the right is no longer (or never was) valid.
+A token's == and === methods accept another token or a hash. In the example above, an attempt has been made to reconstitute
+the original token (using it's salt) on the left. If successful, it will be able to regenerate the hash on the right. But if
+too much time has passed, the hashes will differ and we can conclude that the token has expired.
 
 == Tweak token parameters
 
