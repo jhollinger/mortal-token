@@ -18,8 +18,6 @@ Steps:
 4. Receive a hash and salt from client
 5. Reconstitute the token from the salt, and test if the hashes match. If not, the token has expired (or was forged).
 
-Read the full documentation at {jordanhollinger.com/docs/mortal-token/}[http://jordanhollinger.com/docs/mortal-token/].
-
 == Warning
 
 This is, at best, alpha-quality software. It "works" in that it doesn't usually blow up, but it is not guaranteed to be "right".
