@@ -1,3 +1,7 @@
+** RELEASE 0.2.0 (06/02/2014) **
+* This was not a particulary good concept.
+* However, making it a thin wrapper around HMAC makes it much more secure, while making it slightly less relevant (why not just understand and use HAMC?).
+
 ** RELEASE 0.1.0 (08/03/2012) **
 
 * Add config setting to change time units. Now works with :days, :hours, :minutes

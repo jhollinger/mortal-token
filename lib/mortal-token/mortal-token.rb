@@ -1,12 +1,11 @@
 # A token hash that "self-destructs" after a certain time.
 class MortalToken
   CONFIGS = {} # :nodoc:
-  UNITS = {days: {increment: 1, format: '%Y-%m-%d'}, hours: {increment: 3600, format: '%Y-%m-%d_%H'}, minutes: {increment: 60, format: '%Y-%m-%d_%H:%M'}} # :nodoc:
 
   class << self
     # Returns a new Token. Also alised to #token.
-    def new(salt=nil, time=nil)
-      config.token(salt, time)
+    def new(salt=nil, expires=nil)
+      config.token(salt, expires)
     end
 
     # Returns a new or existing MortalToken::Configuration. If you pass a block, it will pass it the config object.

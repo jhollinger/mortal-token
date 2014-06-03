@@ -1,6 +1,7 @@
-require 'date'
 require 'time'
-require 'digest/sha2'
+require 'base64'
+require 'openssl'
+
 require 'mortal-token/version'
 require 'mortal-token/token'
 require 'mortal-token/configuration'
