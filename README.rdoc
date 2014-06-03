@@ -35,19 +35,15 @@ Or add it to your Gemfile
   require 'sinatra'
   require 'mortal-token'
 
-  # You MUST set a secret key! Otherwise, anyone who looks at the MT source code will be able to forge tokens.
-  # I recommend NOT checking your secret keys into source control. Put them in environment variables or config files.
   MortalToken.secret = 'asdf092$78roasdjfjfaklmsdadASDFopijf98%2ejA#Df@sdf'
 
   post '/login' do
     if login_ok?
       token = MortalToken.new
-      # Optionally, manually set the salt with the first argument, maybe to your user's ID. In a session-cookie based Web 
-      # app, this would be a great way to verify the user_id stored in the cookie:
-      # token = MortalToken.new(current_user.id)
-      session[:digest] = token.digest
+      # Or "token = MortalToken.new(current_user.id)" to set your own salt and verify who owns the session.
       session[:salt] = token.salt
       session[:expires] = token.expires
+      session[:digest] = token.digest
       redirect '/secret'
     end
   end
