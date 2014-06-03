@@ -27,7 +27,28 @@ class MortalToken
       Base64.urlsafe_encode64(self.digest)
     end
 
+    # Returns true if the token expires soon. Default check: within 5 min.
+    def expires_soon?(min=5)
+      Time.now.utc.to_i + (min * 60) >= expires
+    end
+
+    # Returns salt, expires, digest. Convenient for one-line assignment of all three.
+    def get
+      return salt, expires, digest
+    end
+
     alias_method :to_s, :digest
+
+    # Tests this token against another token or token hash. Accepts a block. If the check passes,
+    # this token will be passed to the block.
+    def against(other_token_or_digest)
+      if self == other_token_or_digest
+        yield self if block_given?
+        true
+      else
+        false
+      end
+    end
 
     # Tests this token against another token or token hash. Even if it matches, returns false if
     # the expire time is past.
@@ -37,7 +58,6 @@ class MortalToken
     end
 
     alias_method :===, :==
-    alias_method :against, :==
 
     private
 

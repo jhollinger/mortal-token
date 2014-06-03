@@ -20,6 +20,16 @@ describe MortalToken do
     end
   end
 
+  it "should know if it expires soon" do
+    token = MortalToken.new(nil, Time.now.utc + 120)
+    token.expires_soon?(3).should eq true
+  end
+
+  it "should know if it doesn't expires soon" do
+    token = MortalToken.new
+    token.expires_soon?.should eq false
+  end
+
   context 'days' do
     it "should be valid and equal right after being created" do
       token = MortalToken.new

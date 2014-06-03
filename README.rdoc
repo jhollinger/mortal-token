@@ -60,7 +60,13 @@ Or add it to your Gemfile
     end
   end
 
-== Checking token validity
+== Automatically re-issue nearly expired tokens
+
+  MortalToken.check(session[:salt], session[:expires]).against(session[:digest]) do |token|
+    session[:salt], session[:expires], session[:digest] = MortalToken.new.get if token.expires_soon?
+  end
+
+== Checking token validity explained
 
     MortalToken.check(salt, expires).against(digest)
 
