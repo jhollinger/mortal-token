@@ -1,6 +1,7 @@
-** RELEASE 0.2.0 (06/02/2014) **
+** RELEASE 1.0.0 (06/03/2014) **
+
 * This was not a particulary good concept.
-* However, making it a thin wrapper around HMAC makes it much more secure, while making it slightly less relevant (why not just understand and use HAMC?).
+* However, making it a thin wrapper around HMAC makes it much more secure.
 
 ** RELEASE 0.1.0 (08/03/2012) **
 
