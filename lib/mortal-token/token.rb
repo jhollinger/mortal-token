@@ -18,6 +18,7 @@ class MortalToken
 
     # Returns the hash digest of the token
     def digest
+      raise "MortalToken: you must set a secret!" if config.secret.nil?
       @digest ||= OpenSSL::HMAC.digest(config._digest, config.secret, "#{expires.to_s}:#{salt}")
     end
 
