@@ -1,3 +1,8 @@
+** RELEASE 2.0.0 (12/08/2015) **
+
+* Complete re-write
+* Focus on easily generating and validating auto-expiring messages using HMAC
+
 ** RELEASE 1.0.0 (06/03/2014) **
 
 * This was not a particulary good concept.

@@ -1,26 +1,24 @@
-# A token hash that "self-destructs" after a certain time.
-class MortalToken
-  CONFIGS = {} # :nodoc:
+module MortalToken
+  # Create a new token that lasts for N seconds. Content is optional, but must be a string when present.
+  def self.create(seconds, message = nil)
+    expires = Time.now.utc.to_i + seconds
+    salt = SecureRandom.hex MortalToken.salt_length
+    Token.new expires, salt, message
+  end
 
-  class << self
-    # Returns a new Token. Also alised to #token.
-    def new(salt=nil, expires=nil)
-      config.token(salt, expires)
-    end
+  # Recover a token and digest created with MortalToken#to_s. Returns [token, digest].
+  # You must then check their validity with "token == digest"
+  def self.recover(token_str)
+    h = JSON.parse Base64.urlsafe_decode64 token_str.to_s
+    token = Token.new h['expires'], h['salt'], h['message']
+    return token, h['digest']
+  rescue ArgumentError, JSON::ParserError
+    nil
+  end
 
-    # Returns a new or existing MortalToken::Configuration. If you pass a block, it will pass it the config object.
-    # If it's a new config, it will inherit the default settings.
-    def config(name=:default)
-      config = (CONFIGS[name] ||= Configuration.new(name))
-      yield config if block_given?
-      config
-    end
-
-    alias_method :use, :config
-
-    # Alias all other methods to the default Configuration
-    def method_missing(method, *args, &block)
-      config.send(method, *args, &block)
-    end
+  # Check if a token created with MoralToken#to_s is valid.
+  def self.valid?(token_str)
+    token, digest = recover token_str
+    token == digest
   end
 end

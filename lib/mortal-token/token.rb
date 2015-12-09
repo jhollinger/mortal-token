@@ -1,70 +1,71 @@
-class MortalToken
+module MortalToken
+  # Create a token and check if it's still valid:
+  #
+  #   token = MortalToken.create(300) # 5 min
+  #   give_to_client token.to_s
+  #   token_str = get_from_client
+  #   MoralToken.valid? token_str
+  #
+  # Create a message token. The client *will* be able to read the message, but they *won't* be able to tamper with it.
+  # If your message must aslo be read-proof, you'll have to encrypt it and decrypt it yourself.
+  #
+  #   token = MortalToken.create(300, "message")
+  #   give_to_client token.to_s
+  #   token_str = get_from_client
+  #   token, digest = MortalToken.recover token_str
+  #   if token == digest
+  #     message = token.message
+  #     # Do stuff with message
+  #   else
+  #     # The token was invalid or expired
+  #   end
+  #
   class Token
-    UNITS = {days: {increment: 86400}, hours: {increment: 3600}, minutes: {increment: 60}} # :nodoc:
-
-    # The salt value
-    attr_reader :salt
     # The expiry time as a Unix timestamp
     attr_reader :expires
-    attr_reader :config # :nodoc:
+    # String content of token (optional)
+    attr_reader :message
+    # The salt value
+    attr_reader :salt
 
-    # To create a brand new token, do *not* pass any arguments. To validate a digest from
-    # an existing token, pass the existing token's exiry timestamp.
-    def initialize(salt=nil, expires=nil, config=nil)
-      @config = config || MortalToken.config
-      @salt = salt || self.config.salt
-      @expires = expires ? expires.to_i : calculate_expiry
+    # Initialize an existing token 
+    def initialize(expires, salt, message = nil)
+      @expires = expires.to_i
+      @salt = salt
+      @message = message ? message.to_s : nil
+    end
+
+    # Returns a URL-safe encoding of the token and its digest. Hand it out to users and check it with MoralToken.valid?
+    def to_s
+      h = to_h
+      h[:digest] = digest
+      Base64.urlsafe_encode64 h.to_json
     end
 
     # Returns the hash digest of the token
     def digest
-      raise "MortalToken: you must set a secret!" if config.secret.nil?
-      @digest ||= OpenSSL::HMAC.digest(config._digest, config.secret, "#{expires.to_s}:#{salt}")
+      raise "MortalToken: you must set a secret!" if MortalToken.secret.nil?
+      @digest ||= OpenSSL::HMAC.hexdigest(MortalToken.digest, MortalToken.secret, to_h.to_json)
     end
 
-    # A URL-safe Base64-encoded digest
-    def urlsafe_digest
-      Base64.urlsafe_encode64(self.digest)
-    end
-
-    # Returns true if the token expires soon. Default check: within 5 min.
-    def expires_soon?(min=5)
-      Time.now.utc.to_i + (min * 60) >= expires
-    end
-
-    # Returns salt, expires, digest. Convenient for one-line assignment of all three.
-    def get
-      return salt, expires, digest
-    end
-
-    alias_method :to_s, :digest
-
-    # Tests this token against another token or token hash. Accepts a block. If the check passes,
-    # this token will be passed to the block.
-    def against(other_token_or_digest)
-      if self == other_token_or_digest
-        yield self if block_given?
-        true
-      else
-        false
-      end
+    # Number of seconds remaining
+    def ttl
+      expires - Time.now.utc.to_i
     end
 
     # Tests this token against another token or token hash. Even if it matches, returns false if
     # the expire time is past.
     def ==(other_token_or_digest)
-      other = other_token_or_digest.to_s
-      (self.digest == other || self.urlsafe_digest == other) && self.expires > Time.now.utc.to_i
+      other = other_token_or_digest.respond_to?(:digest) ? other_token_or_digest.digest : other_token_or_digest
+      self.digest == other && self.ttl > 0
     end
 
     alias_method :===, :==
 
     private
 
-    # Returns the end date/time of this token
-    def calculate_expiry
-      expire_time = Time.now.utc.to_i + ((config.valid_for) * UNITS[config.units][:increment])
-      expire_time.to_i
+    def to_h
+      {salt: salt, expires: expires, message: message}
     end
   end
 end
