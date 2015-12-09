@@ -42,9 +42,3 @@ You may tweak certain parameters of the library in order to make it more secure,
 ## Testing
 
     rake test
-
-## License
-
-Copyright 2012 Jordan Hollinger
-
-Licensed under the Apache License
