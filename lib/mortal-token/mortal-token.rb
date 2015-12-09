@@ -1,5 +1,5 @@
 module MortalToken
-  # Create a new token that lasts for N seconds. Content is optional, but must be a string when present.
+  # Create a new token that lasts for N seconds. Message is optional, but must be a string when present.
   def self.create(seconds, message = nil)
     expires = Time.now.utc.to_i + seconds
     salt = SecureRandom.hex MortalToken.salt_length

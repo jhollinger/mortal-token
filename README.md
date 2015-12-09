@@ -27,7 +27,7 @@ MortalToken is a convenience wrapper for HMAC-based authentication. Tokens self-
     token, digest = MortalToken.recover(token_str)
     if token == digest
       # It's valid. But remember - the message could have been read by anyone with access to the token.
-      do_stuff token.message
+      do_stuff_with token.message
     else
       # it's invalid or expired
     end

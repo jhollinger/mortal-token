@@ -14,8 +14,8 @@ module MortalToken
   #   token_str = get_from_client
   #   token, digest = MortalToken.recover token_str
   #   if token == digest
-  #     message = token.message
-  #     # Do stuff with message
+  #     # It's valid
+  #     do_stuff_with token.message
   #   else
   #     # The token was invalid or expired
   #   end
@@ -42,7 +42,7 @@ module MortalToken
       Base64.urlsafe_encode64 h.to_json
     end
 
-    # Returns the hash digest of the token
+    # Returns HMAC hexdigest of the token
     def digest
       raise "MortalToken: you must set a secret!" if MortalToken.secret.nil?
       @digest ||= OpenSSL::HMAC.hexdigest(MortalToken.digest, MortalToken.secret, to_h.to_json)
@@ -53,8 +53,7 @@ module MortalToken
       expires - Time.now.utc.to_i
     end
 
-    # Tests this token against another token or token hash. Even if it matches, returns false if
-    # the expire time is past.
+    # Tests this token against another token or token hash. Even if it matches, returns false if the expire time is past.
     def ==(other_token_or_digest)
       other = other_token_or_digest.respond_to?(:digest) ? other_token_or_digest.digest : other_token_or_digest
       self.digest == other && self.ttl > 0
