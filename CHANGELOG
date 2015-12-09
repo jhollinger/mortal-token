@@ -1,3 +1,7 @@
+** RELEASE 2.0.0 (12/09/2015) **
+
+* Critical bugfix when an invalid token string is passed to MortalToken.recover
+
 ** RELEASE 2.0.0 (12/08/2015) **
 
 * Complete re-write

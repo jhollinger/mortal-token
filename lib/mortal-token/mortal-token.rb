@@ -13,7 +13,7 @@ module MortalToken
     token = Token.new h['expires'], h['salt'], h['message']
     return token, h['digest']
   rescue ArgumentError, JSON::ParserError
-    nil
+    return create 0, ''
   end
 
   # Check if a token created with MoralToken#to_s is valid.

@@ -16,6 +16,11 @@ class TokenTest < Minitest::Test
     assert MortalToken.valid? token.to_s
   end
 
+  def test_invalid_on_expiry
+    token = MortalToken.create 0
+    refute MortalToken.valid? token.to_s
+  end
+
   def test_invalid_after_expiry
     token = MortalToken.create -10
     refute MortalToken.valid? token.to_s
@@ -33,5 +38,10 @@ class TokenTest < Minitest::Test
     token_str = MortalToken.create(60).to_s
     MortalToken.secret = 'different'
     refute MortalToken.valid? token_str
+  end
+
+  def test_recover_fails_if_token_str_is_invalid
+    token, digest = MortalToken.recover 'nonense'
+    refute token == digest
   end
 end
